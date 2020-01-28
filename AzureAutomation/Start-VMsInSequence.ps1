@@ -1,5 +1,19 @@
 <#PSScriptInfo
-.VERSION 1.0
+.VERSION 1.2
+.GUID 34e96a09-afde-43f9-bb8d-be50d0eafbae
+.AUTHOR Thomas Zuehlke
+.COMPANYNAME
+.COPYRIGHT
+.TAGS AzureAutomation VirtualMachines Utility Start Sequence
+.LICENSEURI
+.PROJECTURI https://www.thomas-zuehlke.de/2020/01/start-stop-vms-in-sequence-and-with-delay-via-azure-automation/
+.ICONURI
+.EXTERNALMODULEDEPENDENCIES
+   Az.Account
+   Az.Compute
+.REQUIREDSCRIPTS
+.EXTERNALSCRIPTDEPENDENCIES
+.RELEASENOTES
 #>
 
 #Requires -Module Az.Account
@@ -7,16 +21,31 @@
 
 <#
 .SYNOPSIS
-  Connects to Azure and starts of all VMs in the specified Azure subscription or resource group on given weekdays
+   Connects to Azure and starts specified VMs in a sequence and including a wait time between the VMs.
 
 .DESCRIPTION
-  Based on Start-AzureV2Vs (https://github.com/azureautomation/runbooks/blob/master/Utility/Start-AzureV2VMs.ps1).
+   Connects to Azure and starts specified VMs in a sequence and including a wait time between the VMs. It is based on Start-AzureV2VMs.
+   If you provide the sequence "vm1, vm2, 60, vm3, 30, vm4", then VM1 starts first, then VM2, then it waits 60 seconds before VM3 starts, then waits again for 30 seconds and finally VM4 starts.
 
-.PARAMETER Sequence    
-  A sequence of VM names of a resource group and waiting times in seconds. The informations are separated with commas.
-  Example: vm1, vm2, 60, vm3
-  This starts vm1, then vm2, then waiting 1 minute and afterward will vm3 be started.
+.PARAMETER AzureConnectionAssetName
+   Optional with default of "AzureRunAsConnection".
+   The name of an Automation connection asset that contains an Azure AD service principal with authorization for the subscription
+   you want to start VMs in. To use an asset with a different name you can pass the asset name as a runbook input parameter or change
+   the default value for this input parameter.
 
+.PARAMETER ResourceGroupName
+   Mandatory
+   All VMs in the sequence list, must be located in this resource group.
+
+.PARAMETER Sequence
+   Mandatory
+   A sequence of VM names of a resource group and waiting times in seconds. The informations are separated with commas.
+   Example: vm1, vm2, 60, vm3
+   This starts vm1, then vm2, then waiting 1 minute and afterward will vm3 be started.
+
+.NOTES
+   AUTHOR: Thomas Zuehlke 
+   LASTEDIT: Januar, 2020
 #>
 
 # Returns strings with status messages
