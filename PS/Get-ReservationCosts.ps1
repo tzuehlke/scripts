@@ -47,7 +47,7 @@ $body = @{
     }
 }
 
-$url = "https://management.azure.com/providers/Microsoft.Management/managementGroups/$ManagementGroupID/providers/Microsoft.CostManagement/query?api-version=2021-10-01"
+$url = "https://management.azure.com/providers/Microsoft.Management/managementGroups/$ManagementGroupID/providers/Microsoft.CostManagement/query?api-version=2022-10-01"
 
 $ris = @()
 while($url){
