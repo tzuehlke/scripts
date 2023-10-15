@@ -13,7 +13,7 @@ STRING2SIGN="GET\n\n\n$DATE_ISO\n$URL_RESOURCE"
 DECODED_KEY="$(echo -n $STORAGE_KEY | base64 -d -w0 | od -An -t x1 | tr -d '\n' | tr -d ' ')"
 SIGN=$(printf "$STRING2SIGN" | openssl dgst -sha256 -mac HMAC -macopt "hexkey:$DECODED_KEY" -binary |  base64 -w0)
 
-curl -X GET \
+curl -s -X GET \
   -H "x-ms-version:2023-01-03" \
   -H "x-ms-date:$DATE_ISO" \
   -H "Authorization: SharedKey $STORAGE_ACCOUNT:$SIGN" \
